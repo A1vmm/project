@@ -1,1 +1,631 @@
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StoryShare - Share Your Stories</title>
+ <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="app"></div>
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.18.13/babel.min.js"></script>
+  
+  <script type="text/babel">
+    // Main App Component
+    const App = () => {
+      const [currentPage, setCurrentPage] = React.useState('home');
+      const [loggedIn, setLoggedIn] = React.useState(false);
+      const [showLoginModal, setShowLoginModal] = React.useState(false);
+      const [showRegisterModal, setShowRegisterModal] = React.useState(false);
+      const [activeStory, setActiveStory] = React.useState(null);
+      const [stories, setStories] = React.useState([
+        {
+          id: 1,
+          title: "The Forgotten Path",
+          excerpt: "Hidden deep within the forest, a path that few remembered led to a place of ancient magic and forgotten dreams.",
+          content: "Hidden deep within the forest, a path that few remembered led to a place of ancient magic and forgotten dreams. Elara had always been drawn to the stories her grandmother told about the mystical clearing where wishes came true and time stood still. Most dismissed these tales as the ramblings of an old woman, but Elara knew better.\n\nOn her eighteenth birthday, following the crude map her grandmother had sketched decades ago, Elara ventured into the dense woods. The path was barely visible, overgrown with vegetation and seemingly determined to remain hidden. Hours passed as she navigated through the increasingly thick forest, doubt beginning to creep into her mind.\n\nJust as the sun began to set, casting long shadows through the trees, Elara pushed through a final wall of foliage and gasped. Before her lay a perfectly circular clearing, just as her grandmother had described. In the center stood an ancient oak tree, its massive trunk spiraling upward, branches reaching out like protective arms.\n\nThe air here felt different – charged with an energy that made her skin tingle. As Elara approached the tree, she noticed symbols carved into its bark, symbols that seemed to shift and change when she wasn't looking directly at them.\n\n'I've been waiting for you,' a voice whispered, seemingly coming from everywhere and nowhere at once.\n\nElara wasn't afraid. Somehow, she felt like she had finally come home.",
+          author: {
+            name: "Morgan Winters",
+          },
+          date: "April 28, 2025",
+          category: "Fantasy",
+          likes: 124,
+          comments: 28
+        },
+        {
+          id: 2,
+          title: "Echoes of Tomorrow",
+          excerpt: "The message arrived yesterday, but according to the timestamp, it was sent tomorrow. That's when I realized I wasn't just building a communication device.",
+          content: "The message arrived yesterday, but according to the timestamp, it was sent tomorrow. That's when I realized I wasn't just building a communication device. I was tearing holes in the fabric of time itself.\n\nIt had started as a straightforward quantum computing project—an attempt to create instantaneous communication using entangled particles. The theory was sound: information transmitted across any distance without delay. The military applications alone would have secured funding for decades.\n\nBut something had gone wrong. Or perhaps something had gone terrifyingly right.\n\nThe first anomalous message was simple: 'Test sequence alpha. Confirmation requested.' Nothing unusual except for the timestamp—23 hours in the future.\n\nI dismissed it as a system error and recalibrated. The second message came an hour later: 'Dr. Chen, please respond with prime number sequence to confirm temporal reception.' It was addressed specifically to me, and again, the timestamp placed its origin almost a day ahead.\n\nNow, staring at the third message, I could no longer deny what was happening: 'Tomorrow's lottery numbers: 8, 17, 22, 36, 41, 55. Don't share with anyone but Diane. They're watching the lab now.'\n\nI hadn't told anyone that my wife's name was Diane.\n\nMy hands trembled as I composed a reply. What does one say to their future self? And more importantly—what had I done to the universe in the process?",
+          author: {
+            name: "Dr. Alex Chen",
+          },
+          date: "April 27, 2025",
+          category: "Science Fiction",
+          likes: 86,
+          comments: 14
+        },
+        {
+          id: 3,
+          title: "The Last Bookstore",
+          excerpt: "In a world where physical books had become illegal contraband, The Last Bookstore operated in plain sight, hidden behind layers of digital misdirection.",
+          content: "In a world where physical books had become illegal contraband, The Last Bookstore operated in plain sight, hidden behind layers of digital misdirection.\n\nOn paper (if anyone still used such a thing), Marina's shop sold 'vintage aesthetic displays'—empty book covers and decorative bindings that the wealthy used to signal intellectual sophistication in their meticulously curated home environments. This legitimate business provided the perfect cover for what happened in the back room, accessible only through a scanner that read the specialized ink tattoo on a customer's wrist.\n\nMarina had inherited the business from her father, who had started collecting books when the first bans began. What had started as civil concerns about 'dangerous information' had ballooned into the total digitization of all text—ostensibly for 'preservation' but really for control. Digital texts could be altered remotely, monitored for reader engagement, and most importantly, restricted based on ever-changing government parameters.\n\nThe bell above the door chimed, pulling Marina from her thoughts. A young woman entered, looking nervously over her shoulder. Marina recognized the signs of a first-timer: the furtive glances, the slightly too-casual browsing of the empty display covers.\n\n'Can I help you find anything?' Marina asked, her standard greeting that could mean so much more depending on how it was answered.\n\nThe woman hesitated, then rolled up her sleeve just enough to reveal the distinctive mark of the underground reader's network.\n\n'I heard you might have a copy of...' she lowered her voice to a whisper, '...1984.'\n\nMarina smiled. Another one saved from the digital void. 'Let me show you to our special collection.'",
+          author: {
+            name: "Eliza Warren",
+            
+          },
+        
+          date: "April 25, 2025",
+          category: "Dystopian",
+          likes: 203,
+          comments: 42
+        },
+        {
+          id: 4,
+          title: "Whispers in the Walls",
+          excerpt: "The old Victorian house had a reputation in town, but Hannah never believed in ghost stories—until the whispers started coming through the heating vents.",
+          content: "The old Victorian house had a reputation in town, but Hannah never believed in ghost stories—until the whispers started coming through the heating vents.\n\nAt first, she dismissed the sounds as settling pipes or the wind finding its way through the house's many cracks and crevices. The 150-year-old structure certainly had its quirks, which was partly why Hannah had been able to afford it on her modest teacher's salary. The real estate agent had been surprisingly forthcoming about the property's history—three previous owners in the past decade, all leaving under vague circumstances involving 'family emergencies' or 'unexpected job transfers.'\n\nBy the third night, the whispers had become distinct enough that Hannah could almost make out words—almost, but not quite. They came most often in the hour before dawn, when the house was at its quietest and Hannah was suspended in that vulnerable state between sleep and wakefulness.\n\nAfter a week, she began keeping a recorder by her bed. When she played back the first night's recording, there was nothing but static. The second night yielded the same result. But on the third night's recording, beneath the hiss of white noise, a child's voice clearly asked: 'Have you found it yet?'\n\nHannah might have convinced herself it was an artifact of the recording, a random pattern in the static that her brain was interpreting as speech—if not for the small handprint that appeared on her bathroom mirror the next morning, too high for any child to reach without help.",
+          author: {
+            name: "Thomas Gregory",
+          },
+          date: "April 22, 2025",
+          category: "Horror",
+          likes: 156,
+          comments: 37
+        },
+        {
+          id: 5,
+          title: "The Garden of Second Chances",
+          excerpt: "The community garden appeared overnight on an abandoned lot, bringing with it mysterious properties that gave everyone who tended it exactly what they needed.",
+          content: "The community garden appeared overnight on an abandoned lot, bringing with it mysterious properties that gave everyone who tended it exactly what they needed.\n\nRobert first noticed it on his morning commute—where yesterday there had been only weeds and discarded furniture behind a chain-link fence, today there stretched neat rows of already-thriving vegetables, herbs, and flowers. A hand-painted sign hung on the previously padlocked gate: 'The Garden of Second Chances — All Are Welcome.'\n\nCurious but late for work, Robert made a mental note to investigate later. It was only after his third layoff in two years, walking home with his personal belongings in a cardboard box, that he remembered the garden and decided he had nothing to lose by stopping by.\n\nAn elderly woman with deep smile lines and soil-stained hands greeted him at the gate. 'You look like you could use some thyme,' she said, handing him a seedling in a biodegradable pot.\n\n'I've got plenty of time now,' Robert replied bitterly.\n\nThe woman chuckled. 'Not time. Thyme. The herb. It encourages courage and strength. Plant it, tend it, and see what grows alongside it.'\n\nWith nothing better to do, Robert accepted the small plant and the plot she assigned him. Within weeks, as the thyme flourished under his care, Robert found himself engaged in conversations with other gardeners—one of whom mentioned her company was hiring and thought Robert would be perfect.\n\nAs the seasons passed, Robert noticed that everyone who came to the garden received a different first plant—lavender for the anxious teenager, rosemary for the grieving widower, sunflowers for the artist with creative block. And somehow, impossibly, each person found exactly what they needed while tending their garden plot, through connections made, insights gained, or simply the healing act of nurturing something into growth.",
+          author: {
+            name: "Lydia Jackson",
+          },
+          date: "April 20, 2025",
+          category: "Magical Realism",
+          likes: 211,
+          comments: 53
+        },
+        {
+          id: 6,
+          title: "Cold Case Files: The Midnight Caller",
+          excerpt: "Detective Samuels thought he'd seen everything in his thirty years on the force, until he received a call from a victim whose murder he'd investigated a decade ago.",
+          content: "Detective Samuels thought he'd seen everything in his thirty years on the force, until he received a call from a victim whose murder he'd investigated a decade ago.\n\nThe caller ID showed 'Unknown,' but that wasn't unusual for the detective's private line—many informants preferred to remain anonymous. What was unusual was the voice on the other end: calm, composed, and unmistakably belonging to Catherine Winters, whose mutilated body Samuels had personally examined on a rain-soaked riverbank in 2015.\n\n'Detective Samuels,' the voice said. 'I need to correct some information in your report.'\n\nSamuels felt the hair on the back of his neck stand up. He'd been a cop too long to believe in ghosts, which meant this was either an elaborate prank or something far more sinister.\n\n'Who is this?' he demanded, already signaling to his partner to start a trace on the call.\n\n'You know who it is,' the voice replied. 'Check your case file labeled Winter-dash-03152015. Page sixteen contains a critical error regarding the murder weapon.'\n\nSamuels hadn't thought about that case in years, had done his best to forget it, in fact. It was one of the few that remained unsolved, one of the few that still occasionally invaded his dreams. The file would be in the archives—he wouldn't have the case number memorized after all this time.\n\nExcept the caller had given the exact right case number. A number that had never been released to the press.\n\n'What do you want?' Samuels asked, his mouth suddenly dry.\n\n'Justice,' replied Catherine Winters, ten years dead. 'He's going to kill again tonight. Same method, same location. You have six hours to find him... unless you were involved too.'\n\nThe line went dead, leaving Samuels staring at his phone and wondering if, after all these years, his darkest secret was finally coming to light.",
+          author: {
+            name: "Marcus Reed",
+          },
+          date: "April 18, 2025",
+          category: "Mystery",
+          likes: 178,
+          comments: 46
+        }
+      ]);
+      const [activeCategory, setActiveCategory] = React.useState('All');
+      const [darkMode, setDarkMode] = React.useState(false);
+      
+      // Toggle dark mode
+      React.useEffect(() => {
+        if (darkMode) {
+          document.body.style.backgroundColor = '#111827';
+          document.body.style.color = '#f9fafb';
+        } else {
+          document.body.style.backgroundColor = '#f9fafb';
+          document.body.style.color = '#1f2937';
+        }
+      }, [darkMode]);
+      
+      // Navigate to a specific page
+      const navigateTo = (page, storyId = null) => {
+        window.scrollTo(0, 0);
+        setCurrentPage(page);
+        if (storyId) {
+          const story = stories.find(s => s.id === storyId);
+          setActiveStory(story);
+        }
+      };
+      
+      // Add a new story
+      const addStory = (story) => {
+        const newStory = {
+          ...story,
+          id: stories.length + 1,
+          date: new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
+          likes: 0,
+          comments: 0,
+          author: {
+            name: "You"
+          }
+        };
+        setStories([newStory, ...stories]);
+        navigateTo('home');
+      };
+      
+      // Filter stories by category
+      const filteredStories = activeCategory === 'All' 
+        ? stories 
+        : stories.filter(story => story.category === activeCategory);
+      
+      // Login handler
+      const handleLogin = () => {
+        setLoggedIn(true);
+        setShowLoginModal(false);
+      };
+      
+      // Register handler
+      const handleRegister = () => {
+        setLoggedIn(true);
+        setShowRegisterModal(false);
+      };
+      
+      // Render the current page
+      const renderPage = () => {
+        switch (currentPage) {
+          case 'home':
+            return <HomePage 
+                     stories={filteredStories} 
+                     navigateTo={navigateTo}
+                     activeCategory={activeCategory}
+                     setActiveCategory={setActiveCategory}
+                     darkMode={darkMode} />;
+          case 'story':
+            return <StoryPage 
+                     story={activeStory} 
+                     navigateTo={navigateTo}
+                     darkMode={darkMode} />;
+          case 'write':
+            return <WriteStoryPage 
+                     addStory={addStory}
+                     navigateTo={navigateTo}
+                     darkMode={darkMode} />;
+          default:
+            return <HomePage 
+                     stories={filteredStories} 
+                     navigateTo={navigateTo}
+                     activeCategory={activeCategory}
+                     setActiveCategory={setActiveCategory}
+                     darkMode={darkMode} />;
+        }
+      };
+      
+      return (
+        <React.Fragment>
+          {/* Header */}
+          <header className={darkMode ? 'bg-gray-900 text-white' : 'bg-white'}>
+            <div className="container">
+              <div className="header-content">
+                <a href="#" className="logo" onClick={(e) => { e.preventDefault(); navigateTo('home'); }}>
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                    <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+                  </svg>
+                  StoryShare
+                </a>
+                
+                <div className="nav-links">
+                  <a href="#" className="nav-link" onClick={(e) => { e.preventDefault(); navigateTo('home'); }}>Home</a>
+                  <a href="#" className="nav-link" onClick={(e) => { e.preventDefault(); navigateTo('write'); }}>Write a Story</a>
+                  <button className="dark-mode-toggle" onClick={() => setDarkMode(!darkMode)}>
+                    {darkMode ? (
+                      <React.Fragment>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <circle cx="12" cy="12" r="5"></circle>
+                          <line x1="12" y1="1" x2="12" y2="3"></line>
+                          <line x1="12" y1="21" x2="12" y2="23"></line>
+                          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                          <line x1="1" y1="12" x2="3" y2="12"></line>
+                          <line x1="21" y1="12" x2="23" y2="12"></line>
+                          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                        </svg>
+                        Light Mode
+                      </React.Fragment>
+                    ) : (
+                      <React.Fragment>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                        </svg>
+                        Dark Mode
+                      </React.Fragment>
+                    )}
+                  </button>
+                </div>
+                
+                <div className="auth-buttons">
+                  {loggedIn ? (
+                    <button className="btn btn-outline" onClick={() => setLoggedIn(false)}>Log Out</button>
+                  ) : (
+                    <React.Fragment>
+                      <button className="btn btn-outline" onClick={() => setShowLoginModal(true)}>Log In</button>
+                      <button className="btn btn-primary" onClick={() => setShowRegisterModal(true)}>Sign Up</button>
+                    </React.Fragment>
+                  )}
+                </div>
+              </div>
+            </div>
+          </header>
+          
+          {/* Main Content */}
+          <main className={darkMode ? 'bg-gray-900' : ''}>
+            {renderPage()}
+          </main>
+          
+          {/* Footer */}
+          <footer className={`footer ${darkMode ? 'bg-gray-900 text-white border-gray-800' : ''}`}>
+            <div className="container">
+              <div className="footer-content">
+                <div className="footer-section">
+                  <h3>StoryShare</h3>
+                  <ul className="footer-links">
+                    <li className="footer-link"><a href="#">About Us</a></li>
+                    <li className="footer-link"><a href="#">Careers</a></li>
+                    <li className="footer-link"><a href="#">Press</a></li>
+                    <li className="footer-link"><a href="#">Contact</a></li>
+                  </ul>
+                </div>
+                
+                <div className="footer-section">
+                  <h3>Resources</h3>
+                  <ul className="footer-links">
+                    <li className="footer-link"><a href="#">Writing Tips</a></li>
+                    <li className="footer-link"><a href="#">Grammar Guide</a></li>
+                    <li className="footer-link"><a href="#">Prompts</a></li>
+                    <li className="footer-link"><a href="#">Workshops</a></li>
+                  </ul>
+                </div>
+                
+                <div className="footer-section">
+                  <h3>Legal</h3>
+                  <ul className="footer-links">
+                    <li className="footer-link"><a href="#">Terms of Service</a></li>
+                    <li className="footer-link"><a href="#">Privacy Policy</a></li>
+                    <li className="footer-link"><a href="#">Copyright</a></li>
+                    <li className="footer-link"><a href="#">Community Guidelines</a></li>
+                  </ul>
+                </div>
+                
+                <div className="footer-section">
+                  <h3>Connect</h3>
+                  <ul className="footer-links">
+                    <li className="footer-link"><a href="#">Twitter</a></li>
+                    <li className="footer-link"><a href="#">Instagram</a></li>
+                    <li className="footer-link"><a href="#">Facebook</a></li>
+                    <li className="footer-link"><a href="#">Newsletter</a></li>
+                  </ul>
+                </div>
+              </div>
+              
+              <div className="copyright">
+                &copy; {new Date().getFullYear()} StoryShare. All rights reserved.
+              </div>
+            </div>
+          </footer>
+          
+          {/* Login Modal */}
+          {showLoginModal && (
+            <div className="modal-overlay">
+              <div className="modal">
+                <div className="modal-header">
+                  <h2 className="modal-title">Log In</h2>
+                  <button className="modal-close" onClick={() => setShowLoginModal(false)}>&times;</button>
+                </div>
+                <form onSubmit={(e) => { e.preventDefault(); handleLogin(); }}>
+                  <div className="form-group">
+                    <label className="form-label" htmlFor="login-email">Email</label>
+                    <input className="form-input" type="email" id="login-email" required />
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label" htmlFor="login-password">Password</label>
+                    <input className="form-input" type="password" id="login-password" required />
+                  </div>
+                  <button type="submit" className="btn btn-primary" style={{ width: '100%' }}>Log In</button>
+                </form>
+              </div>
+            </div>
+          )}
+          
+          {/* Register Modal */}
+          {showRegisterModal && (
+            <div className="modal-overlay">
+              <div className="modal">
+                <div className="modal-header">
+                  <h2 className="modal-title">Sign Up</h2>
+                  <button className="modal-close" onClick={() => setShowRegisterModal(false)}>&times;</button>
+                </div>
+                <form onSubmit={(e) => { e.preventDefault(); handleRegister(); }}>
+                  <div className="form-group">
+                    <label className="form-label" htmlFor="register-name">Full Name</label>
+                    <input className="form-input" type="text" id="register-name" required />
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label" htmlFor="register-email">Email</label>
+                    <input className="form-input" type="email" id="register-email" required />
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label" htmlFor="register-password">Password</label>
+                    <input className="form-input" type="password" id="register-password" required />
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label" htmlFor="register-password-confirm">Confirm Password</label>
+                    <input className="form-input" type="password" id="register-password-confirm" required />
+                  </div>
+                  <button type="submit" className="btn btn-primary" style={{ width: '100%' }}>Sign Up</button>
+                </form>
+              </div>
+            </div>
+          )}
+        </React.Fragment>
+      );
+    };
+    
+    // HomePage Component
+    const HomePage = ({ stories, navigateTo, activeCategory, setActiveCategory, darkMode }) => {
+      const categories = ['All', 'Fantasy', 'Science Fiction', 'Mystery', 'Horror', 'Romance', 'Historical', 'Dystopian', 'Magical Realism'];
+      
+      return (
+        <div className="container">
+          {/* Hero Section */}
+          <section className={`hero ${darkMode ? 'bg-gray-800 text-white' : 'bg-white'}`}>
+            <h1>Share Your Stories with the World</h1>
+            <p>Join our community of writers and readers. Explore stories across all genres, or share your own creative writing with an engaged audience.</p>
+            <button className="btn btn-primary" onClick={() => navigateTo('write')}>Start Writing</button>
+          </section>
+          
+          {/* Categories */}
+          <section>
+            <h2 className="section-title">Explore Categories</h2>
+            <div className="categories">
+              {categories.map(category => (
+                <div 
+                  key={category}
+                  className={`category-pill ${activeCategory === category ? 'active' : ''} ${darkMode ? 'bg-gray-800 border-gray-700' : ''}`}
+                  onClick={() => setActiveCategory(category)}
+                >
+                  {category}
+                </div>
+              ))}
+            </div>
+          </section>
+          
+          {/* Stories Grid */}
+          <section>
+            <h2 className="section-title">Recent Stories</h2>
+            <div className="stories-grid">
+              {stories.map(story => (
+                <div key={story.id} className={`story-card ${darkMode ? 'bg-gray-800' : ''}`}>
+                  <div className="story-content">
+                    <h3 className="story-title">{story.title}</h3>
+                    <p className="story-excerpt">{story.excerpt}</p>
+                    <div className="story-meta">
+                      <div className="author">
+                        <span>{story.author.name}</span>
+                      </div>
+                      <span>{story.date}</span>
+                    </div>
+                    <a href="#" className="read-more" onClick={(e) => { e.preventDefault(); navigateTo('story', story.id); }}>
+                      Read more
+                    </a>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+        </div>
+      );
+    };
+    
+    // StoryPage Component
+    const StoryPage = ({ story, navigateTo, darkMode }) => {
+      const [comments, setComments] = React.useState([
+        {
+          id: 1,
+          author: {
+            name: "Reader123",
+          },
+          content: "This story really resonated with me. The imagery was so vivid I could almost feel like I was there in the scene.",
+          date: "April 30, 2025"
+        },
+        {
+          id: 2,
+          author: {
+            name: "BookLover45",
+          },
+          content: "The character development was superb. I'm looking forward to reading more from this author!",
+          date: "April 29, 2025"
+        }
+      ]);
+      const [commentText, setCommentText] = React.useState('');
+      
+      // Add comment handler
+      const addComment = (e) => {
+        e.preventDefault();
+        if (!commentText.trim()) return;
+        
+        const newComment = {
+          id: comments.length + 1,
+          author: {
+            name: "You",
+          },
+          content: commentText,
+          date: new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
+        };
+        
+        setComments([...comments, newComment]);
+        setCommentText('');
+      };
+      
+      if (!story) {
+        return <div className="container text-center py-5">Story not found</div>;
+      }
+      
+      return (
+        <div className="container">
+          <div className="story-header">
+            <h1 className="story-page-title">{story.title}</h1>
+            <div className="story-page-meta">
+              <div className="story-page-author">
+                <span>{story.author.name}</span>
+              </div>
+              <span>{story.date}</span>
+              <span>{story.category}</span>
+            </div>
+          </div>
+          
+          <div className="story-page-content">
+            {story.content.split('\n\n').map((paragraph, index) => (
+              <p key={index}>{paragraph}</p>
+            ))}
+          </div>
+          
+          <div className="story-actions">
+            <button className="action-btn">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+              </svg>
+              {story.likes} Likes
+            </button>
+            <button className="action-btn">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M18 8h1a4 4 0 0 1 0 8h-1"></path>
+                <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path>
+                <line x1="6" y1="1" x2="6" y2="4"></line>
+                <line x1="10" y1="1" x2="10" y2="4"></line>
+                <line x1="14" y1="1" x2="14" y2="4"></line>
+              </svg>
+              Share
+            </button>
+          </div>
+          
+          <div className="comments-section">
+            <h3 className="comments-title">Comments ({comments.length})</h3>
+            
+            {comments.map(comment => (
+              <div key={comment.id} className={`comment ${darkMode ? 'bg-gray-800 border-gray-700' : ''}`}>
+                <div className="comment-header">
+                  <div className="comment-author">
+                    <span>{comment.author.name}</span>
+                  </div>
+                  <span className="comment-date">{comment.date}</span>
+                </div>
+                <div className="comment-content">
+                  {comment.content}
+                </div>
+              </div>
+            ))}
+            
+            <div className="add-comment">
+              <h4>Add a Comment</h4>
+              <form onSubmit={addComment}>
+                <div className="form-group">
+                  <textarea 
+                    className="form-input form-textarea" 
+                    placeholder="Share your thoughts..."
+                    value={commentText}
+                    onChange={(e) => setCommentText(e.target.value)}
+                    required
+                  ></textarea>
+                </div>
+                <button type="submit" className="btn btn-primary">Post Comment</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      );
+    };
+    
+    // WriteStoryPage Component
+    const WriteStoryPage = ({ addStory, navigateTo, darkMode }) => {
+      const [title, setTitle] = React.useState('');
+      const [excerpt, setExcerpt] = React.useState('');
+      const [content, setContent] = React.useState('');
+      const [category, setCategory] = React.useState('Fantasy');
+      
+      const handleSubmit = (e) => {
+        e.preventDefault();
+        
+        const newStory = {
+          title,
+          excerpt,
+          content,
+          category,
+        };
+        
+        addStory(newStory);
+      };
+      
+      return (
+        <div className="container" style={{ padding: '2rem 0' }}>
+          <h1 className="section-title">Write Your Story</h1>
+          
+          <form className={`story-form ${darkMode ? 'bg-gray-800' : ''}`} onSubmit={handleSubmit}>
+            <div className="form-group">
+              <label className="form-label" htmlFor="story-title">Title</label>
+              <input 
+                className="form-input" 
+                type="text" 
+                id="story-title" 
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                required 
+              />
+            </div>
+            
+            <div className="form-group">
+              <label className="form-label" htmlFor="story-excerpt">Short Description/Excerpt (will appear in previews)</label>
+              <textarea 
+                className="form-input" 
+                id="story-excerpt" 
+                value={excerpt}
+                onChange={(e) => setExcerpt(e.target.value)}
+                required
+              ></textarea>
+            </div>
+            
+            <div className="form-group">
+              <label className="form-label" htmlFor="story-category">Category</label>
+              <select 
+                className="form-select" 
+                id="story-category"
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+              >
+                <option value="Fantasy">Fantasy</option>
+                <option value="Science Fiction">Science Fiction</option>
+                <option value="Mystery">Mystery</option>
+                <option value="Horror">Horror</option>
+                <option value="Romance">Romance</option>
+                <option value="Historical">Historical</option>
+                <option value="Dystopian">Dystopian</option>
+                <option value="Magical Realism">Magical Realism</option>
+              </select>
+            </div>
+            
+            <div className="form-group">
+              <label className="form-label" htmlFor="story-content">Story Content</label>
+              <textarea 
+                className="form-input form-textarea" 
+                id="story-content" 
+                value={content}
+                onChange={(e) => setContent(e.target.value)}
+                required
+              ></textarea>
+            </div>
+            
+            <div style={{ display: 'flex', gap: '1rem' }}>
+              <button type="button" className="btn btn-outline" onClick={() => navigateTo('home')}>Cancel</button>
+              <button type="submit" className="btn btn-primary">Publish Story</button>
+            </div>
+          </form>
+        </div>
+      );
+    };
+    
+    // Render the App
+    const root = ReactDOM.createRoot(document.getElementById('app'));
+    root.render(<App />);
+  </script>
+</body>
+</html>
